@@ -1,0 +1,25 @@
+{
+  "name": "lbaquotes-discord",
+  "version": "0.0.1",
+  "description": "Discord App Bot to interact with Little Big Adventure series quotes",
+  "repository": "https://github.com/xesf/lbaquotes-discord.git",
+  "author": "Alexandre Fontoura <xesfnet@gmail.com>",
+  "license": "MIT",
+  "private": false,
+  "main": "src/index.js",
+  "scripts": {
+    "build": "babel src -d dist",
+    "start": "nodemon ./src/index.js --exec babel-node -- --ignore .\/node_modules"
+  },
+  "dependencies": {
+    "lodash": "4.17.11"
+  },
+  "devDependencies": {
+      "@babel/cli": "^7.1.5",
+      "@babel/core": "^7.1.6",
+      "@babel/node": "^7.0.0",
+      "@babel/preset-env": "^7.1.6",
+      "mocha": "^5.2.0",
+      "nodemon": "^1.17.5"
+  }
+}
