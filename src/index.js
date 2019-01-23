@@ -80,7 +80,6 @@ client.on('message', message => {
 
         case 'lba2':
             let randomEntry = Math.floor((Math.random() * allquotes.length));
-            console.log(args);
             if (args.length > 0) {
                 if (!isNaN(args[0])) {
                     randomEntry = parseInt(args[0]);
