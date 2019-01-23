@@ -1,4 +1,8 @@
 { 
     "token"  : "add your own token here",
-    "prefix" : ">"
+    "prefix" : "!",
+    "channel" : {
+        "quotes" : "your quotes channel id",
+        "voice" : "your voice channel id"
+    }
 }
