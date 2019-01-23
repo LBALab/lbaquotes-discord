@@ -86,6 +86,12 @@ client.on('message', message => {
                     randomEntry = parseInt(args[0]);
                 } else if (args[0].includes('#')) {
                     randomEntry = parseInt(args[0].split('#')[1]);
+                } else {
+                    randomEntry = allquotes.findIndex((q) => q.value.includes(args[0]));
+                }
+                if (randomEntry === -1) {
+                    message.reply(`LBA2 quote containing *\`${args[0]}\`* was not found!!`);
+                    break;
                 }
             }
             const text = allquotes[randomEntry];
