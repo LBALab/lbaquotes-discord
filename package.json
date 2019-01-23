@@ -9,7 +9,8 @@
   "main": "src/index.js",
   "scripts": {
     "build": "babel src -d dist",
-    "start": "nodemon ./src/index.js --exec babel-node -- --ignore ./node_modules"
+    "start": "babel-node ./src/index.js --ignore ./node_modules",
+    "start:watch": "nodemon ./src/index.js --exec babel-node -- --ignore ./node_modules"
   },
   "dependencies": {
     "discord.js": "^11.4.2",
