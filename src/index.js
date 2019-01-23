@@ -40,14 +40,13 @@ const client = new Discord.Client();
 
 client.on('ready', () => {
     console.log(`Logged in as ${client.user.tag}!`);
-    const voiceChannel = client.channels.get('534060253587701804');
+    const voiceChannel = client.channels.get(config.channel.voice);
     voiceChannel.join();
 
-    const channel = client.channels.get('534072057286361089') // #quote channel
+    const channel = client.channels.get(config.channel.quotes);
     setInterval(
         () => {
-            const randomEntry = Math.floor((Math.random() * language.entries.length));
-            const text = randomText(randomEntry);
+            const text = allquotes[Math.floor((Math.random() * allquotes.length))];
             const dialog = `${text.value}`;
             const quote = '```' + dialog + '```' + `*\`LBA2 (#${text.index})\`*`;
             channel.send(quote);
@@ -76,23 +75,18 @@ client.on('message', message => {
             break;
 
         case 'lba2':
-            const randomEntry = Math.floor((Math.random() * language.entries.length));
-            const text = randomText(randomEntry);
-            const vox = loadHqr(`VOX2/EN_AAC_${randomEntry}.VOX`);
-            const voxEntry = vox.getEntry(text.index);
-            const filename = `data/VOX2/dump/EN_AAC_${randomEntry}_${text.index}.aac`;
-            fs.writeFileSync(filename, Buffer.from(voxEntry));
+            const text = allquotes[Math.floor((Math.random() * allquotes.length))];
 
             const dialog = `${text.value}`;
             const quote = '```' + dialog + '```' + `*\`LBA2 (#${text.index})\`*`;
             message.reply(quote);
 
-            const voiceChannel = client.channels.get('534060253587701804'); // message.member.voiceChannel;
+            const voiceChannel = client.channels.get(config.channel.voice); // message.member.voiceChannel;
             voiceChannel.join().then(connection =>
             {
-                const dispatcher = connection.playFile(filename);
+                const dispatcher = connection.playFile(text.filename, { bitrate: 128000 }); // connection.playStream(fs.createReadStream(filename)); 
                 dispatcher.on("end", end => {
-                    voiceChannel.leave();
+                    // voiceChannel.leave();
                 });
             }).catch(err => console.log(err));
             break;
