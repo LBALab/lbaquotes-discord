@@ -40,8 +40,8 @@ const client = new Discord.Client();
 
 client.on('ready', () => {
     console.log(`Logged in as ${client.user.tag}!`);
-    const voiceChannel = client.channels.get(config.channel.voice);
-    voiceChannel.join();
+    // const voiceChannel = client.channels.get(config.channel.voice);
+    // voiceChannel.join();
 
     const channel = client.channels.get(config.channel.quotes);
     setInterval(
@@ -74,11 +74,24 @@ client.on('message', message => {
             message.reply('pong');
             break;
 
+        case 'lba1':
+            message.reply('Sorry, LBA1 quotes are not implemented yet!');
+            break;
+
         case 'lba2':
-            const text = allquotes[Math.floor((Math.random() * allquotes.length))];
+            let randomEntry = Math.floor((Math.random() * allquotes.length));
+            console.log(args);
+            if (args.length > 0) {
+                if (!isNaN(args[0])) {
+                    randomEntry = parseInt(args[0]);
+                } else if (args[0].includes('#')) {
+                    randomEntry = parseInt(args[0].split('#')[1]);
+                }
+            }
+            const text = allquotes[randomEntry];
 
             const dialog = `${text.value}`;
-            const quote = '```' + dialog + '```' + `*\`LBA2 (#${text.index})\`*`;
+            const quote = '```' + dialog + '```' + `*\`LBA2 (#${randomEntry})\`*`;
             message.reply(quote);
 
             const voiceChannel = client.channels.get(config.channel.voice); // message.member.voiceChannel;
@@ -86,7 +99,7 @@ client.on('message', message => {
             {
                 const dispatcher = connection.playFile(text.filename, { bitrate: 128000 }); // connection.playStream(fs.createReadStream(filename)); 
                 dispatcher.on("end", end => {
-                    // voiceChannel.leave();
+                    voiceChannel.leave();
                 });
             }).catch(err => console.log(err));
             break;
