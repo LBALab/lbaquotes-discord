@@ -9,9 +9,27 @@ import Languages from './constants';
 import config from './config.json';
 
 const language = Languages.LBA2[0];
-/* const texts = loadTexts(language, language.entries[Math.floor((Math.random() * language.entries.length))]);
-const text = texts[Math.floor(Math.random() * texts.length)];
-console.info(text.value); */
+const allquotes = [];
+
+console.log('Preloading...');
+let index = 0;
+language.entries.forEach((e) => {
+    try {
+        const texts = loadTexts(language, e);
+        const vox = loadHqr(`VOX2/EN_AAC_${index}.VOX`);
+        texts.forEach((t) => {
+            try {
+                const voxEntry = vox.getEntry(t.index);
+                const filename = `data/VOX2/dump/EN_AAC_${index}_${t.index}.aac`;
+                t.filename = filename;
+                fs.writeFileSync(filename, Buffer.from(voxEntry));
+            } catch (e) { console.log(e)}
+        });
+        allquotes.push(...texts);
+    } catch (e) { console.log(e)}
+    index++;
+});
+console.log('Preloading... [OK]');
 
 const randomText = (randomEntry) => {
     const texts = loadTexts(language, language.entries[randomEntry]);
