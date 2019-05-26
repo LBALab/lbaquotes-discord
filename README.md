@@ -17,11 +17,10 @@ The bot will randomly add a game quote every 3h on #lba-quotes.
 
 # Enhancements List
 
-* Add LBA2 multi-language text
-* Add LBA2 multi-language voice
-* Add LBA1 text
-* Add LBA1 voice samples
-* Add LBA1 multi-language text
-* Add LBA1 multi-language voice
+* Help command with usage intructions
+* Add LBA2 multi-language text and voice
+* Add LBA1 text and voice samples
+* Add LBA1 multi-language text and voice
 * Add fan based text translations
 * Add special translations (Russion, Japonese)
+* Play LBA1 and LBA2 soundtracks
