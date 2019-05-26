@@ -13,6 +13,7 @@ const allquotes = [];
 
 console.log('Preloading...');
 let index = 0;
+let entryIndex = 0;
 language.entries.forEach((e) => {
     try {
         const texts = loadTexts(language, e);
@@ -23,6 +24,8 @@ language.entries.forEach((e) => {
                 const filename = `data/VOX2/dump/EN_AAC_${index}_${t.index}.aac`;
                 t.filename = filename;
                 fs.writeFileSync(filename, Buffer.from(voxEntry));
+                t.entryIndex = entryIndex;
+                entryIndex += 1;
             } catch (e) { console.log(e)}
         });
         allquotes.push(...texts);
@@ -86,9 +89,10 @@ client.on('message', message => {
                 } else if (args[0].includes('#')) {
                     randomEntry = parseInt(args[0].split('#')[1]);
                 } else {
+                    // randomEntry = allquotes.findIndex((q) => q.value.toLowerCase().includes(args[0].toLowerCase()));
                     const quotes = allquotes.filter((q) => q.value.toLowerCase().includes(args[0].toLowerCase()));
                     if (quotes) {
-                        randomEntry = Math.floor(Math.random() * quotes.length);
+                        randomEntry = quotes[Math.floor(Math.random() * quotes.length)].entryIndex;
                     }
                 }
                 if (randomEntry === -1) {
