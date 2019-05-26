@@ -91,7 +91,7 @@ client.on('message', message => {
                 } else {
                     // randomEntry = allquotes.findIndex((q) => q.value.toLowerCase().includes(args[0].toLowerCase()));
                     const quotes = allquotes.filter((q) => q.value.toLowerCase().includes(args[0].toLowerCase()));
-                    if (quotes) {
+                    if (quotes && quotes.length > 0) {
                         randomEntry = quotes[Math.floor(Math.random() * quotes.length)].entryIndex;
                     }
                 }
