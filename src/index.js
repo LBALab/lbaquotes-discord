@@ -11,6 +11,14 @@ import config from './config.json';
 const language = Languages.LBA2[0];
 const allquotes = [];
 
+process.on("unhandledRejection", err => {
+    console.error("Uncaught Promise Error: \n" + err.stack);
+});
+
+process.on("error", err => {
+    console.error("Uncaught Error: \n" + err.stack);
+});
+
 console.log('Preloading...');
 let index = 0;
 let entryIndex = 0;
@@ -118,8 +126,11 @@ client.on('message', message => {
     }
 });
 
-client.on('disconnected', () => {
-    setTimeout(() => client.login(config.token), 5000);
+client.on('disconnect', async () => {
+    client.destroy();
+    client.login(config.token);
 });
+
+client.on('error', (err) => console.log(err));
 
 client.login(config.token);
