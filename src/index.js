@@ -118,4 +118,8 @@ client.on('message', message => {
     }
 });
 
+client.on('disconnected', () => {
+    setTimeout(() => client.login(config.token), 5000);
+});
+
 client.login(config.token);
