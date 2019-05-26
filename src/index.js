@@ -36,7 +36,7 @@ const randomText = (randomEntry) => {
     return texts[Math.floor(Math.random() * texts.length)];
 };
 
-const client = new Discord.Client();
+const client = new Discord.Client({ autoReconnect: true });
 
 client.on('ready', () => {
     console.log(`Logged in as ${client.user.tag}!`);
