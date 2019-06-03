@@ -47,23 +47,22 @@ const randomText = (randomEntry) => {
     return texts[Math.floor(Math.random() * texts.length)];
 };
 
-const client = new Discord.Client({ autoReconnect: true });
+const client = new Discord.Client();
 
 client.on('ready', () => {
     console.log(`Logged in as ${client.user.tag}!`);
-    // const voiceChannel = client.channels.get(config.channel.voice);
-    // voiceChannel.join();
 
-    const channel = client.channels.get(config.channel.quotes);
-    setInterval(
-        () => {
-            const text = allquotes[Math.floor((Math.random() * allquotes.length))];
-            const dialog = `${text.value}`;
-            const quote = '```' + dialog + '```' + `*\`LBA2 (#${text.index})\`*`;
-            channel.send(quote);
-        },
-        10800000 // every 3h
-    );
+    // // every 3h random message disabled
+    // const channel = client.channels.get(config.channel.quotes);
+    // setInterval(
+    //     () => {
+    //         const text = allquotes[Math.floor((Math.random() * allquotes.length))];
+    //         const dialog = `${text.value}`;
+    //         const quote = '```' + dialog + '```' + `*\`LBA2 (#${text.index})\`*`;
+    //         channel.send(quote);
+    //     },
+    //     10800000 // every 3h
+    // );
 })
 
 client.on('message', message => {
@@ -90,14 +89,13 @@ client.on('message', message => {
             break;
 
         case 'lba2':
-            let randomEntry = Math.floor((Math.random() * allquotes.length));
+            let randomEntry = -1;
             if (args.length > 0) {
                 if (!isNaN(args[0])) {
                     randomEntry = parseInt(args[0]);
                 } else if (args[0].includes('#')) {
                     randomEntry = parseInt(args[0].split('#')[1]);
                 } else {
-                    // randomEntry = allquotes.findIndex((q) => q.value.toLowerCase().includes(args[0].toLowerCase()));
                     const quotes = allquotes.filter((q) => q.value.toLowerCase().includes(args[0].toLowerCase()));
                     if (quotes && quotes.length > 0) {
                         randomEntry = quotes[Math.floor(Math.random() * quotes.length)].entryIndex;
@@ -107,12 +105,19 @@ client.on('message', message => {
                     message.reply(`LBA2 quote containing *\`${args[0]}\`* was not found!!`);
                     break;
                 }
+            } else {
+                randomEntry = Math.floor((Math.random() * allquotes.length));
             }
+            
             const text = allquotes[randomEntry];
-
-            const dialog = `${text.value}`;
-            const quote = '```' + dialog + '```' + `*\`LBA2 (#${randomEntry})\`*`;
-            message.reply(quote);
+            message.channel.send({
+                embed: {
+                    description: '```' + text.value + '```',
+                    footer: {
+                        text: `LBA2 (#${randomEntry})`,
+                    },
+                }
+            });
 
             const voiceChannel = client.channels.get(config.channel.voice); // message.member.voiceChannel;
             voiceChannel.join().then(connection =>

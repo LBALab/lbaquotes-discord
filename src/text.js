@@ -8,7 +8,7 @@ function getLanguageTextIndex(language, index) {
 export function loadTextData(hqr, language) {
     const mapData = new Uint16Array(hqr.getEntry(language.index));
     const data = new DataView(hqr.getEntry(language.index + 1));
-    const texts = []; // {};
+    const texts = [];
     let start;
     let end;
     let idx = 0;
@@ -24,8 +24,7 @@ export function loadTextData(hqr, language) {
                 : data.getUint8(i)
             );
         }
-        //texts[mapData[idx]] = {type, index: idx, value};
-        texts.push({type, index: idx, value});
+        texts.push({type, index: idx, value: value.replace(' @ ','\n\n')});
         idx += 1;
     } while (end < data.byteLength);
 
