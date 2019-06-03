@@ -180,6 +180,9 @@ client.on('message', message => {
                 if (game === 'lba2' && !isNaN(entry) && characters[character]) {
                     lba2who[entry] = character;
                     fs.writeFileSync('metadata/lba2who.json', JSON.stringify(lba2who, null, 2));
+                    message.reply(`${character} added to ${game} quote #${entry}`);
+                } else {
+                    message.reply('who command needs 3 arguments, game (lba2), entry (234) and character (twinsen)');    
                 }
             } else {
                 message.reply('who command needs 3 arguments, game (lba2), entry (234) and character (twinsen)');
