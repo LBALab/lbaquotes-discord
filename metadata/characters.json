@@ -1,17 +1,35 @@
 {
     "twinsen": {
+        "type": "character",
         "name": "Twinsen",
         "portrait": "http://twinsuniverse.xesf.net/images/3/3a/Twinsen.jpg",
         "race": "Quetch"
     },
     "zoe": {
+        "type": "character",
         "name": "Zoé",
         "portrait": "http://twinsuniverse.xesf.net/images/c/c3/Zo%C3%A9.jpg",
         "race": "Quetch"
     },
     "jerome": {
+        "type": "character",
         "name": "Jérôme Baldino",
         "portrait": "http://twinsuniverse.xesf.net/images/9/9c/Jerome_Baldino.jpg",
         "race": "Grobo"
+    },
+    "holomap": {
+        "type": "inventory",
+        "name": "Holomap",
+        "portrait": "http://twinsuniverse.xesf.net/images/1/1a/Holomap.gif"
+    },
+    "magicball": {
+        "type": "inventory",
+        "name": "Magic Ball",
+        "portrait": "http://twinsuniverse.xesf.net/images/3/35/Yellowball.gif"
+    },
+    "tunic": {
+        "type": "inventory",
+        "name": "Ancestral Tunic",
+        "portrait": "http://twinsuniverse.xesf.net/images/6/6f/Tunic.gif"
     }
 }

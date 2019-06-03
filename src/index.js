@@ -136,17 +136,30 @@ client.on('message', message => {
                 //     name: `${character.name} says:`,
                 //     // "icon_url": character.portrait,
                 // };
-                fields = [{
-                        name: 'Character',
-                        value: character.name,
-                        inline: true,
-                    },
-                    {
-                        name: 'Race',
-                        value: character.race,
-                        inline: true,
-                    }
-                ];
+                switch (character.type) {
+                    case 'character':    
+                        fields = [{
+                                name: 'Character',
+                                value: character.name,
+                                inline: true,
+                            },
+                            {
+                                name: 'Race',
+                                value: character.race,
+                                inline: true,
+                            }
+                        ];
+                        break;
+
+                    case 'inventory':
+                        fields = [{
+                                name: 'Inventory',
+                                value: character.name,
+                                inline: true,
+                            }
+                        ];
+                        break;
+                }
             }
             
             const text = allquotes[randomEntry];
