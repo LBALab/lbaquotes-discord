@@ -11,6 +11,9 @@ import config from './config.json';
 const language = Languages.LBA2[0];
 const allquotes = [];
 
+let characters = null;
+let lba2who = [];
+
 process.on("unhandledRejection", err => {
     console.error("Uncaught Promise Error: \n" + err.stack);
 });
@@ -40,6 +43,19 @@ language.entries.forEach((e) => {
     } catch (e) { console.log(e)}
     index++;
 });
+
+const charactersFilename = 'metadata/characters.json';
+if (fs.existsSync(charactersFilename)) {
+    const charactersMetadata = fs.readFileSync(charactersFilename);
+    characters = JSON.parse(charactersMetadata);
+}
+
+const lba2Filename = 'metadata/lba2who.json';
+if (fs.existsSync(lba2Filename)) {
+    const lba2Metadata = fs.readFileSync(lba2Filename);
+    lba2who = JSON.parse(lba2Metadata);
+}
+
 console.log('Preloading... [OK]');
 
 const randomText = (randomEntry) => {
@@ -109,13 +125,40 @@ client.on('message', message => {
                 randomEntry = Math.floor((Math.random() * allquotes.length));
             }
             
+            let thumbnail = null;
+            //let author = null;
+            let fields = null;
+            const who = lba2who[randomEntry];
+            if (who) {
+                const character = characters[who];
+                thumbnail = { url: character.portrait };
+                // author = {
+                //     name: `${character.name} says:`,
+                //     // "icon_url": character.portrait,
+                // };
+                fields = [{
+                        name: 'Character',
+                        value: character.name,
+                        inline: true,
+                    },
+                    {
+                        name: 'Race',
+                        value: character.race,
+                        inline: true,
+                    }
+                ];
+            }
+            
             const text = allquotes[randomEntry];
             message.channel.send({
                 embed: {
                     description: '```' + text.value + '```',
                     footer: {
-                        text: `LBA2 (#${randomEntry})`,
+                        text: `LBA2 | ${randomEntry}`,
                     },
+                    thumbnail,
+                    // author,
+                    fields,
                 }
             });
 
@@ -127,6 +170,20 @@ client.on('message', message => {
                     voiceChannel.leave();
                 });
             }).catch(err => console.log(err));
+            break;
+
+        case 'who':
+            if (args.length === 3) {
+                const game = args[0];
+                const entry = args[1];
+                const character = args[2];
+                if (game === 'lba2' && !isNaN(entry) && characters[character]) {
+                    lba2who[entry] = character;
+                    fs.writeFileSync('metadata/lba2who.json', JSON.stringify(lba2who, null, 2));
+                }
+            } else {
+                message.reply('who command needs 3 arguments, game (lba2), entry (234) and character (twinsen)');
+            }
             break;
     }
 });

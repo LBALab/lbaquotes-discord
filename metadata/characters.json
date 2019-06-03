@@ -1,0 +1,17 @@
+{
+    "twinsen": {
+        "name": "Twinsen",
+        "portrait": "http://twinsuniverse.xesf.net/images/3/3a/Twinsen.jpg",
+        "race": "Quetch"
+    },
+    "zoe": {
+        "name": "Zoé",
+        "portrait": "http://twinsuniverse.xesf.net/images/c/c3/Zo%C3%A9.jpg",
+        "race": "Quetch"
+    },
+    "jerome": {
+        "name": "Jérôme Baldino",
+        "portrait": "http://twinsuniverse.xesf.net/images/9/9c/Jerome_Baldino.jpg",
+        "race": "Grobo"
+    }
+}
