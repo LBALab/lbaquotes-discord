@@ -150,26 +150,30 @@ client.on('message', message => {
             }
             
             const text = allquotes[randomEntry];
-            message.channel.send({
-                embed: {
-                    description: '```' + text.value + '```',
-                    footer: {
-                        text: `LBA2 | ${randomEntry}`,
-                    },
-                    thumbnail,
-                    // author,
-                    fields,
-                }
-            });
-
-            const voiceChannel = client.channels.get(config.channel.voice); // message.member.voiceChannel;
-            voiceChannel.join().then(connection =>
-            {
-                const dispatcher = connection.playFile(text.filename, { bitrate: 128000 }); // connection.playStream(fs.createReadStream(filename)); 
-                dispatcher.on("end", end => {
-                    voiceChannel.leave();
+            if (text) {
+                message.channel.send({
+                    embed: {
+                        description: '```' + text.value + '```',
+                        footer: {
+                            text: `LBA2 | ${randomEntry}`,
+                        },
+                        thumbnail,
+                        // author,
+                        fields,
+                    }
                 });
-            }).catch(err => console.log(err));
+
+                const voiceChannel = client.channels.get(config.channel.voice); // message.member.voiceChannel;
+                voiceChannel.join().then(connection =>
+                {
+                    const dispatcher = connection.playFile(text.filename, { bitrate: 128000 }); // connection.playStream(fs.createReadStream(filename)); 
+                    dispatcher.on("end", end => {
+                        voiceChannel.leave();
+                    });
+                }).catch(err => console.log(err));
+            } else {
+                message.reply(`LBA2 quote containing *\`${randomEntry}\`* was not found!!`);
+            }
             break;
 
         case 'who':
