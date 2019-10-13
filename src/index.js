@@ -4,14 +4,15 @@ import stream from 'stream';
 import Discord  from 'discord.js';
 
 import { loadHqr } from './hqr';
-import { loadTexts } from './text';
+import { loadTexts2, loadTexts1 } from './text';
 import Languages from './constants';
 import config from './config.json';
 
-const language = Languages.LBA2[0];
-const allquotes = [];
+const allquotes1 = [];
+const allquotes2 = [];
 
 let characters = null;
+let lba1who = [];
 let lba2who = [];
 
 process.on("unhandledRejection", err => {
@@ -25,9 +26,29 @@ process.on("error", err => {
 console.log('Preloading...');
 let index = 0;
 let entryIndex = 0;
-language.entries.forEach((e) => {
+
+console.log('LBA1...');
+Languages.LBA1[0].entries.forEach((e) => {
     try {
-        const texts = loadTexts(language, e);
+        const texts = loadTexts1(Languages.LBA1[0], e);
+        texts.forEach((t) => {
+            try {
+                t.entryIndex = entryIndex;
+                entryIndex += 1;
+            } catch (e) { console.log(e)}
+        });
+        allquotes1.push(...texts);
+    } catch (e) { console.log(e)}
+    index++;
+});
+console.log('LBA1... [OK]');
+
+index = 0;
+entryIndex = 0;
+console.log('LBA2...');
+Languages.LBA2[0].entries.forEach((e) => {
+    try {
+        const texts = loadTexts2(Languages.LBA2[0], e);
         const vox = loadHqr(`VOX2/EN_AAC_${index}.VOX`);
         texts.forEach((t) => {
             try {
@@ -39,10 +60,11 @@ language.entries.forEach((e) => {
                 entryIndex += 1;
             } catch (e) { console.log(e)}
         });
-        allquotes.push(...texts);
+        allquotes2.push(...texts);
     } catch (e) { console.log(e)}
     index++;
 });
+console.log('LBA2... [OK]');
 
 const charactersFilename = 'metadata/characters.json';
 if (fs.existsSync(charactersFilename)) {
@@ -55,11 +77,16 @@ if (fs.existsSync(lba2Filename)) {
     const lba2Metadata = fs.readFileSync(lba2Filename);
     lba2who = JSON.parse(lba2Metadata);
 }
+const lba1Filename = 'metadata/lba1who.json';
+if (fs.existsSync(lba1Filename)) {
+    const lba1Metadata = fs.readFileSync(lba1Filename);
+    lba1who = JSON.parse(lba1Metadata);
+}
 
 console.log('Preloading... [OK]');
 
-const randomText = (randomEntry) => {
-    const texts = loadTexts(language, language.entries[randomEntry]);
+const randomText2 = (randomEntry) => {
+    const texts = loadTexts2(language, language.entries[randomEntry]);
     return texts[Math.floor(Math.random() * texts.length)];
 };
 
@@ -100,11 +127,7 @@ client.on('message', message => {
             message.reply('pong');
             break;
 
-        case 'lba1':
-            message.reply('Sorry, LBA1 quotes are not implemented yet!');
-            break;
-
-        case 'lba2':
+        case 'lba1': {
             let randomEntry = -1;
             if (args.length > 0) {
                 if (!isNaN(args[0])) {
@@ -112,7 +135,94 @@ client.on('message', message => {
                 } else if (args[0].includes('#')) {
                     randomEntry = parseInt(args[0].split('#')[1]);
                 } else {
-                    const quotes = allquotes.filter((q) => q.value.toLowerCase().includes(args[0].toLowerCase()));
+                    const quotes = allquotes1.filter((q) => q.value.toLowerCase().includes(args[0].toLowerCase()));
+                    if (quotes && quotes.length > 0) {
+                        randomEntry = quotes[Math.floor(Math.random() * quotes.length)].entryIndex;
+                    }
+                }
+                if (randomEntry === -1) {
+                    message.reply(`LBA1 quote containing *\`${args[0]}\`* was not found!!`);
+                    break;
+                }
+            } else {
+                randomEntry = Math.floor((Math.random() * allquotes1.length));
+            }
+            
+            let thumbnail = null;
+            //let author = null;
+            let fields = null;
+            const who = lba1who[randomEntry];
+            if (who) {
+                const character = characters[who];
+                thumbnail = { url: character.portrait };
+                // author = {
+                //     name: `${character.name} says:`,
+                //     // "icon_url": character.portrait,
+                // };
+                switch (character.type) {
+                    case 'character':    
+                        fields = [{
+                                name: 'Character',
+                                value: character.name,
+                                inline: true,
+                            },
+                            {
+                                name: 'Race',
+                                value: character.race,
+                                inline: true,
+                            }
+                        ];
+                        break;
+
+                    case 'inventory':
+                        fields = [{
+                                name: 'Inventory',
+                                value: character.name,
+                                inline: true,
+                            }
+                        ];
+                        break;
+                }
+            }
+            
+            const text = allquotes1[randomEntry];
+            console.log(text);
+            if (text) {
+                message.channel.send({
+                    embed: {
+                        description: '```' + text.value + '```',
+                        footer: {
+                            text: `LBA1 | ${randomEntry}`,
+                        },
+                        thumbnail,
+                        // author,
+                        fields,
+                    }
+                });
+
+                const voiceChannel = client.channels.get(config.channel.voice); // message.member.voiceChannel;
+                voiceChannel.join().then(connection =>
+                {
+                    const dispatcher = connection.playFile(text.filename, { bitrate: 128000 }); // connection.playStream(fs.createReadStream(filename)); 
+                    dispatcher.on("end", end => {
+                        voiceChannel.leave();
+                    });
+                }).catch(err => console.log(err));
+            } else {
+                message.reply(`LBA1 quote containing *\`${randomEntry}\`* was not found!!`);
+            }
+            break;
+        }
+
+        case 'lba2': {
+            let randomEntry = -1;
+            if (args.length > 0) {
+                if (!isNaN(args[0])) {
+                    randomEntry = parseInt(args[0]);
+                } else if (args[0].includes('#')) {
+                    randomEntry = parseInt(args[0].split('#')[1]);
+                } else {
+                    const quotes = allquotes2.filter((q) => q.value.toLowerCase().includes(args[0].toLowerCase()));
                     if (quotes && quotes.length > 0) {
                         randomEntry = quotes[Math.floor(Math.random() * quotes.length)].entryIndex;
                     }
@@ -122,7 +232,7 @@ client.on('message', message => {
                     break;
                 }
             } else {
-                randomEntry = Math.floor((Math.random() * allquotes.length));
+                randomEntry = Math.floor((Math.random() * allquotes2.length));
             }
             
             let thumbnail = null;
@@ -162,7 +272,7 @@ client.on('message', message => {
                 }
             }
             
-            const text = allquotes[randomEntry];
+            const text = allquotes2[randomEntry];
             if (text) {
                 message.channel.send({
                     embed: {
@@ -188,7 +298,8 @@ client.on('message', message => {
                 message.reply(`LBA2 quote containing *\`${randomEntry}\`* was not found!!`);
             }
             break;
-
+        }
+        
         case 'who':
             if (args.length === 3) {
                 const game = args[0];
@@ -198,11 +309,15 @@ client.on('message', message => {
                     lba2who[entry] = character;
                     fs.writeFileSync('metadata/lba2who.json', JSON.stringify(lba2who, null, 2));
                     message.reply(`${character} added to ${game} quote #${entry}`);
+                } else if (game === 'lba1' && !isNaN(entry) && characters[character]) {
+                    lba1who[entry] = character;
+                    fs.writeFileSync('metadata/lba1who.json', JSON.stringify(lba1who, null, 2));
+                    message.reply(`${character} added to ${game} quote #${entry}`);
                 } else {
-                    message.reply('who command needs 3 arguments, game (lba2), entry (234) and character (twinsen)');    
+                    message.reply('who command needs 3 arguments, game (lba1|lba2), entry (234) and character (twinsen)');    
                 }
             } else {
-                message.reply('who command needs 3 arguments, game (lba2), entry (234) and character (twinsen)');
+                message.reply('who command needs 3 arguments, game (lba1|lba2), entry (234) and character (twinsen)');
             }
             break;
     }
