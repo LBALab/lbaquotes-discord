@@ -188,7 +188,6 @@ client.on('message', message => {
             }
             
             const text = allquotes1[randomEntry];
-            console.log(text);
             if (text) {
                 message.channel.send({
                     embed: {
