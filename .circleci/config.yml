@@ -39,28 +39,28 @@ jobs:
       # Copy files over
       - run:
           name: Build archive
-          command: npm pack && mv lbaquotes-discord-`node -p "require('./package.json').version"`.tgz /tmp/lbaquotes-discord.tgz
+          command: npm pack && mv lbaquotes-discord-`node -p "require('./package.json').version"`.tgz /tmp/workspace/lbaquotes-discord.tgz
 
       # Store artifacts
       - store_artifacts:
-          path: /tmp/lbaquotes-discord.tgz
+          path: /tmp/workspace/lbaquotes-discord.tgz
 
       - persist_to_workspace:
-          root: workspace
+          root: /tmp/workspace
           paths:
-            - repo/dist
+            - lbaquotes-discord.tgz
 
   deploy:
     machine: 
       enabled: true
-    working_directory: ~/repo
+    # working_directory: ~/repo
     steps: 
       - attach_workspace:
           at: /tmp/workspace
       - run:
           name: Deploy Over SSH
           command: | 
-              scp -r ~//tmp/workspace/repo/dist/* "$DROPLET_USER@$DROPLET_IP:$DROPLET_PATH"
+              scp -r ~/tmp/workspace/* "$DROPLET_USER@$DROPLET_IP:$DROPLET_PATH"
 
 workflows:
   version: 2
