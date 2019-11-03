@@ -35,3 +35,12 @@ jobs:
 
       # run build
       - run: yarn build
+
+      # Copy files over
+      - run:
+          name: Build archive
+          command: npm pack && mv lbaquotes-discord-`node -p "require('./package.json').version"`.tgz /tmp/lbaquotes-discord.tgz
+
+      # Store artifacts
+      - store_artifacts:
+          path: /tmp/lbaquotes-discord.tgz
