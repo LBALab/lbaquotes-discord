@@ -49,9 +49,9 @@ jobs:
       #     path: /tmp/workspace/lbaquotes-discord.tgz
 
       - persist_to_workspace:
-          root: /tmp
-          paths:
-            - workspace
+          root: /tmp/workspace/
+          # paths:
+          #   - workspace
 
   deploy:
     machine: 
@@ -59,7 +59,7 @@ jobs:
     # working_directory: ~/repo
     steps: 
       - attach_workspace:
-          at: /tmp/workspace
+          at: /tmp/workspace/
       - run:
           name: Deploy Over SSH
           command: | 
