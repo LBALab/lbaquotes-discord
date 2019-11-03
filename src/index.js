@@ -204,7 +204,7 @@ client.on('message', message => {
                 // const voiceChannel = client.channels.get(config.channel.voice); // message.member.voiceChannel;
                 // voiceChannel.join().then(connection =>
                 // {
-                //     const dispatcher = connection.playFile(text.filename, { bitrate: 128000 }); // connection.playStream(fs.createReadStream(filename)); 
+                //     const dispatcher = connection.playFile(text.filename, { bitrate: 22000 }); // connection.playStream(fs.createReadStream(filename)); 
                 //     dispatcher.on("end", end => {
                 //         voiceChannel.leave();
                 //     });
@@ -290,12 +290,12 @@ client.on('message', message => {
                 const voiceChannel = client.channels.get(config.channel.voice); // message.member.voiceChannel;
                 voiceChannel.join().then(connection =>
                 {
-                    const dispatcher = connection.playFile(text.filename, { bitrate: 128000 }); // connection.playStream(fs.createReadStream(filename)); 
+                    const dispatcher = connection.playFile(text.filename, { bitrate: 22000 }); // connection.playStream(fs.createReadStream(filename)); 
                     dispatcher.on("error", err => {
                         console.error(err);
                     })
                     dispatcher.on("end", end => {
-                        voiceChannel.leave();
+                        setTimeout(() => voiceChannel.leave(), 5000);
                     });
                 }).catch(err => console.log(err));
             } else {
