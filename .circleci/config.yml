@@ -36,6 +36,8 @@ jobs:
       # run build
       - run: yarn build
 
+      - run: mkdir /tmp/workspace
+
       # Copy files over
       - run:
           name: Build archive
