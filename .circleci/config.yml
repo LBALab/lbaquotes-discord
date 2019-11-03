@@ -48,7 +48,7 @@ jobs:
       - persist_to_workspace:
           root: workspace
           paths:
-            - repo
+            - repo/dist
 
   deploy:
     machine: 
@@ -60,7 +60,7 @@ jobs:
       - run:
           name: Deploy Over SSH
           command: | 
-              scp -r ~//tmp/workspace/repo/* "$DROPLET_USER@$DROPLET_IP:$DROPLET_PATH"
+              scp -r ~//tmp/workspace/repo/dist/* "$DROPLET_USER@$DROPLET_IP:$DROPLET_PATH"
 
 workflows:
   version: 2
