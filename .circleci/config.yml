@@ -64,6 +64,7 @@ jobs:
           name: Deploy Over SSH
           command: | 
               scp -r /tmp/lbaquotes-discord/* "$DROPLET_USER@$DROPLET_IP:$DROPLET_PATH"
+              ssh "$DROPLET_USER@$DROPLET_IP:$DROPLET_PATH" "./deploy_lbaquotes-discord.sh"
 
 workflows:
   version: 2
