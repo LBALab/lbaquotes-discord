@@ -188,7 +188,7 @@ client.on('message', message => {
             }
             
             const text = allquotes1[randomEntry];
-            if (text) {
+            if (text && text.value !== '') {
                 message.channel.send({
                     embed: {
                         description: '```' + text.value + '```',
@@ -201,14 +201,14 @@ client.on('message', message => {
                     }
                 });
 
-                const voiceChannel = client.channels.get(config.channel.voice); // message.member.voiceChannel;
-                voiceChannel.join().then(connection =>
-                {
-                    const dispatcher = connection.playFile(text.filename, { bitrate: 128000 }); // connection.playStream(fs.createReadStream(filename)); 
-                    dispatcher.on("end", end => {
-                        voiceChannel.leave();
-                    });
-                }).catch(err => console.log(err));
+                // const voiceChannel = client.channels.get(config.channel.voice); // message.member.voiceChannel;
+                // voiceChannel.join().then(connection =>
+                // {
+                //     const dispatcher = connection.playFile(text.filename, { bitrate: 128000 }); // connection.playStream(fs.createReadStream(filename)); 
+                //     dispatcher.on("end", end => {
+                //         voiceChannel.leave();
+                //     });
+                // }).catch(err => console.log(err));
             } else {
                 message.reply(`LBA1 quote containing *\`${randomEntry}\`* was not found!!`);
             }
@@ -274,7 +274,7 @@ client.on('message', message => {
             }
             
             const text = allquotes2[randomEntry];
-            if (text) {
+            if (text && text.value !== '') {
                 message.channel.send({
                     embed: {
                         description: '```' + text.value + '```',
@@ -291,6 +291,9 @@ client.on('message', message => {
                 voiceChannel.join().then(connection =>
                 {
                     const dispatcher = connection.playFile(text.filename, { bitrate: 128000 }); // connection.playStream(fs.createReadStream(filename)); 
+                    dispatcher.on("error", err => {
+                        console.error(err);
+                    })
                     dispatcher.on("end", end => {
                         voiceChannel.leave();
                     });
