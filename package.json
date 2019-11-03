@@ -15,10 +15,10 @@
     "start:watch": "nodemon ./src/index.js --exec babel-node -- --ignore ./node_modules"
   },
   "dependencies": {
-    "discord.js": "^11.5.1",
+    "discord.js": "^11.4.2",
     "ffmpeg": "^0.0.4",
     "lodash": "^4.17.15",
-    "opusscript": "^0.0.7"
+    "opusscript": "^0.0.6"
   },
   "devDependencies": {
     "@babel/cli": "^7.6.4",
