@@ -36,22 +36,22 @@ jobs:
       # run build
       - run: yarn build
 
-      - run: mkdir /tmp/workspace
+      - run: mkdir /tmp/lbaquotes-discord
 
       # Copy files over
       - run:
           name: Build archive
-          command: cp ./dist/* /tmp/workspace/
-          # command: npm pack && mv lbaquotes-discord-`node -p "require('./package.json').version"`.tgz /tmp/workspace/lbaquotes-discord.tgz
+          command: cp ./dist/* /tmp/lbaquotes-discord/
+          # command: npm pack && mv lbaquotes-discord-`node -p "require('./package.json').version"`.tgz /tmp/lbaquotes-discord/lbaquotes-discord.tgz
 
       # Store artifacts
       # - store_artifacts:
       #     path: /tmp/workspace/lbaquotes-discord.tgz
 
       - persist_to_workspace:
-          root: /tmp/workspace/
-          # paths:
-          #   - workspace
+          root: /tmp/
+          paths:
+            - lbaquotes-discord
 
   deploy:
     machine: 
@@ -59,11 +59,11 @@ jobs:
     # working_directory: ~/repo
     steps: 
       - attach_workspace:
-          at: /tmp/workspace/
+          at: /tmp/lbaquotes-discord/
       - run:
           name: Deploy Over SSH
           command: | 
-              scp -r /tmp/workspace/* "$DROPLET_USER@$DROPLET_IP:$DROPLET_PATH"
+              scp -r /tmp/lbaquotes-discord/* "$DROPLET_USER@$DROPLET_IP:$DROPLET_PATH"
 
 workflows:
   version: 2
