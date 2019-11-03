@@ -45,15 +45,22 @@ jobs:
       - store_artifacts:
           path: /tmp/lbaquotes-discord.tgz
 
+      - persist_to_workspace:
+          root: workspace
+          paths:
+            - repo
+
   deploy:
     machine: 
       enabled: true
     working_directory: ~/repo
     steps: 
+      - attach_workspace:
+          at: /tmp/workspace
       - run:
           name: Deploy Over SSH
           command: | 
-              scp -r ~/repo "$DROPLET_USER@$DROPLET_IP:$DROPLET_PATH"
+              scp -r ~//tmp/workspace/repo/* "$DROPLET_USER@$DROPLET_IP:$DROPLET_PATH"
 
 workflows:
   version: 2
