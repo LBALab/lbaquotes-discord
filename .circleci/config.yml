@@ -62,7 +62,7 @@ jobs:
       - run:
           name: Deploy Over SSH
           command: | 
-              scp -r ~/tmp/workspace/* "$DROPLET_USER@$DROPLET_IP:$DROPLET_PATH"
+              scp -r /tmp/workspace/* "$DROPLET_USER@$DROPLET_IP:$DROPLET_PATH"
 
 workflows:
   version: 2
