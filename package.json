@@ -9,6 +9,7 @@
   "main": "src/index.js",
   "scripts": {
     "build": "babel src -s -d dist/",
+    "build:prod": "webpack -p",
     "start": "babel-node ./src/index.js --ignore ./node_modules",
     "start:watch": "nodemon ./src/index.js --exec babel-node -- --ignore ./node_modules"
   },
@@ -24,6 +25,8 @@
     "@babel/node": "^7.0.0",
     "@babel/preset-env": "^7.1.6",
     "mocha": "^5.2.0",
-    "nodemon": "^1.17.5"
+    "nodemon": "^1.17.5",
+    "webpack": "^4.41.2",
+    "webpack-cli": "^3.3.10"
   }
 }
