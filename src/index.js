@@ -295,7 +295,7 @@ client.on('message', message => {
                         console.error(err);
                     })
                     dispatcher.on("end", end => {
-                        setTimeout(() => voiceChannel.leave(), 5000);
+                        voiceChannel.leave();
                     });
                 }).catch(err => console.log(err));
             } else {
