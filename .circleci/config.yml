@@ -44,3 +44,25 @@ jobs:
       # Store artifacts
       - store_artifacts:
           path: /tmp/lbaquotes-discord.tgz
+
+deploy:
+   machine: 
+     enabled: true
+   working_directory: ~/repo
+   steps: 
+     - run:
+         name: Deploy Over SSH
+         command: | 
+            scp -r ~/repo "$DROPLET_USER@$DROPLET_IP:$DROPLET_PATH"
+
+workflows:
+  version: 2
+  build-and-deploy:
+    jobs:
+        - build
+        - deploy:
+            requires:
+              - build
+            filters:
+              branches: 
+                only: master
