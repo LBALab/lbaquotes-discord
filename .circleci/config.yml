@@ -33,6 +33,8 @@ jobs:
             - node_modules
           key: v1-dependencies-{{ checksum "package.json" }}
 
+      - run: touch ~/repo/src/config.json
+
       # run build
       - run: npm run build:prod
 

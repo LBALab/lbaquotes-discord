@@ -6,7 +6,9 @@ import Discord  from 'discord.js';
 import { loadHqr } from './hqr';
 import { loadTexts2, loadTexts1 } from './text';
 import Languages from './constants';
-import config from './config.json';
+
+const requireFunc = typeof __webpack_require__ === "function" ? __non_webpack_require__ : require;
+const config = requireFunc('./config.json');
 
 const allquotes1 = [];
 const allquotes2 = [];
