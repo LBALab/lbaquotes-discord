@@ -37,5 +37,10 @@
     "name": "Dino-Fly",
     "race": "Dino",
     "portrait": "http://twinsuniverse.xesf.net/images/0/00/Dino-Fly.jpg"
+  },
+  "key": {
+    "type": "inventory",
+    "name": "Ancestral Key",
+    "portrait": "http://twinsuniverse.xesf.net/images/f/f5/Key_to_the_heirs_room1.png"
   }
 }

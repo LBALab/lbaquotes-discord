@@ -421,7 +421,7 @@ client.on('message', message => {
 
                     characters[id] = {
                         type: 'character',
-                        name: toUpperFirst(name).replace('_',''),
+                        name: toUpperFirst(name).replace('_',' '),
                         race: toUpperFirst(race),
                         portrait,
                     };
@@ -432,6 +432,51 @@ client.on('message', message => {
                 }
                 
                 message.reply('character command needs 3/4 arguments, id (twinsen|zoe|jerome), name (Twinsen|Zoé|Jérôme-Baldino), race (Quetch|Franco) and [portrait URL]');
+                break;
+
+            case 'inventory':
+                if (a.length === 1) {
+                    const id = a[0];
+                    const character = characters[id];
+                    const thumbnail = { url: character.portrait };
+                    const fields = [{
+                            name: 'Inventory',
+                            value: character.name,
+                            inline: true,
+                        },
+                    ];
+                    message.channel.send({
+                        embed: {
+                            description: '``Id ' + id + '``',
+                            thumbnail,
+                            fields,
+                        }
+                    });
+                    break;
+                } else if (a.length === 2 || a.length === 3) {
+                    const id = a[0];
+                    const name = a[1];
+                    const portrait = a[2] ? a[2] : '';
+
+                    // do some command param validation
+                    if (characters[id]) {
+                        message.reply(`Inventory ${id}:${name} already exists!!`);
+                        run('inventory', [id]);
+                        break;
+                    }
+
+                    characters[id] = {
+                        type: 'inventory',
+                        name: toUpperFirst(name).replace('_',' '),
+                        portrait,
+                    };
+                    fs.writeFileSync('metadata/characters.json', JSON.stringify(characters, null, 2));
+                    message.reply(`Inventory ${id}:${name} added!!`);
+                    run('inventory', [id]);
+                    break;
+                }
+                
+                message.reply('inventory command needs 2/3 arguments, id (tunic), name (Ancestral_Tunic) and [portrait URL]');
                 break;
         }
     };
