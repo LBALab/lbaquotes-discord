@@ -1,3 +1,9 @@
+/** TODO LIST
+ * Improve code readibility
+ * Remove duplication code
+ * Separate commands in their own func/file
+ * Stream LBA1 quotes
+*/
 import fs from 'fs';
 import stream from 'stream';
 
@@ -309,20 +315,43 @@ client.on('message', message => {
                 const game = args[0];
                 const entry = args[1];
                 const character = args[2];
-                if (game === 'lba2' && !isNaN(entry) && characters[character]) {
+
+                // do some command param validation
+                if (!characters[character]) {
+                    message.reply(`The character ${character} does not exist.`);
+                    break;
+                }
+                if (isNaN(entry)) {
+                    message.reply(`The entry ${entry} is not a valid number.`);
+                    break;
+                }
+                if (game === 'lba1' && parseInt(entry) >= allquotes1.length) {
+                    message.reply(`The entry ${entry} is not valid. Please provide a number between 0 and ${allquotes1.length - 1} for ${game} quotes`);
+                    break;
+                }
+                if (game === 'lba2' && parseInt(entry) >= allquotes2.length) {
+                    message.reply(`The entry ${entry} is not valid. Please provide a number between 0 and ${allquotes2.length - 1} for ${game} quotes`);
+                    break;
+                }
+
+                if (game === 'lba2') {
                     lba2who[entry] = character;
                     fs.writeFileSync('metadata/lba2who.json', JSON.stringify(lba2who, null, 2));
                     message.reply(`${character} added to ${game} quote #${entry}`);
-                } else if (game === 'lba1' && !isNaN(entry) && characters[character]) {
+                    break;
+                }
+                if (game === 'lba1') {
                     lba1who[entry] = character;
                     fs.writeFileSync('metadata/lba1who.json', JSON.stringify(lba1who, null, 2));
                     message.reply(`${character} added to ${game} quote #${entry}`);
-                } else {
-                    message.reply('who command needs 3 arguments, game (lba1|lba2), entry (234) and character (twinsen)');    
+                    break;
                 }
-            } else {
-                message.reply('who command needs 3 arguments, game (lba1|lba2), entry (234) and character (twinsen)');
+                
+                message.reply(`The game ${game} is not a valid type`);
+                break;
             }
+            
+            message.reply('who command needs 3 arguments, game (lba1|lba2), entry (234) and character (twinsen)');
             break;
     }
 });
