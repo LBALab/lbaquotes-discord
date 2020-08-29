@@ -42,5 +42,36 @@
     "type": "inventory",
     "name": "Ancestral Key",
     "portrait": "http://twinsuniverse.xesf.net/images/f/f5/Key_to_the_heirs_room1.png"
+  },
+  "ticket": {
+    "type": "inventory",
+    "name": "Ferry Ticket",
+    "portrait": "http://twinsuniverse.xesf.net/images/e/ec/Ticket.gif"
+  },
+  "bu": {
+    "type": "inventory",
+    "name": "Book of_Bù",
+    "portrait": "http://twinsuniverse.xesf.net/images/1/15/Book_of_bu1.png"
+  },
+  "bottle": {
+    "type": "inventory",
+    "name": "Bottle of_Syrup",
+    "portrait": "http://twinsuniverse.xesf.net/images/0/02/Bottle_of_Syrup1.png"
+  },
+  "joe": {
+    "type": "character",
+    "name": "Joe the_Elf",
+    "race": "Elf",
+    "portrait": "https://twinsuniverse.xesf.net/File:Joe_the_Elf.jpg"
+  },
+  "horn": {
+    "type": "inventory",
+    "name": "Horn of_Gawley",
+    "portrait": "https://twinsuniverse.xesf.net/images/e/e7/Horn_of_Gawley1.png"
+  },
+  "diploma": {
+    "type": "inventory",
+    "name": "Wizards Diploma",
+    "portrait": "https://twinsuniverse.xesf.net/images/1/1b/Diploma.gif"
   }
 }
