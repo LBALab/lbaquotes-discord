@@ -37,8 +37,8 @@ const LBA2_DEFAULT_CHARMAP = [
     240,  241,  242,  243,  244,  245,  246,  247,  248,  249,  250,  251,  252,  253,  254,  255
 ];
 
-const LBA1_TEXT_ENTRIES = [6,  10,  12,  14,  16,  18,  20,  22,  24,  26,  4];
-const LBA2_TEXT_ENTRIES = [6,  10,  12,  14,  16,  18,  20,  22,  24,  26,  28,  4];
+const LBA1_TEXT_ENTRIES = [6, 8, 10,  12,  14,  16,  18,  20,  22,  24,  26,  4];
+const LBA2_TEXT_ENTRIES = [6, 10,  12,  14,  16,  18,  20,  22,  24,  26,  28,  4];
 
 /* eslint-disable key-spacing, no-multi-spaces */
 export default {
