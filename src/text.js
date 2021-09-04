@@ -29,7 +29,7 @@ export function loadTextData(game, hqr, language) {
                 : data.getUint8(i)
             );
         }
-        texts.push({type, index: idx, value: value.replace(' @ ','\n\n')});
+        texts.push({type, index: idx, value: value.replace(' @ ','\n\n').replace('@','\n\n')});
         idx += 1;
     } while (end < data.byteLength);
 

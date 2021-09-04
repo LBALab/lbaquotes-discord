@@ -120,7 +120,7 @@ client.on('ready', () => {
     //     },
     //     10800000 // every 3h
     // );
-})
+});
 
 client.on('message', message => {
     // ignore other bots or itself
@@ -145,18 +145,19 @@ client.on('message', message => {
             case 'lba1': {
                 let randomEntry = -1;
                 if (a.length > 0) {
+                    const query = a.join(' ');
                     if (!isNaN(a[0])) {
                         randomEntry = parseInt(a[0]);
                     } else if (a[0].includes('#')) {
                         randomEntry = parseInt(a[0].split('#')[1]);
                     } else {
-                        const quotes = allquotes1.filter((q) => q.value.toLowerCase().includes(a[0].toLowerCase()));
+                        const quotes = allquotes1.filter((q) => q.value.toLowerCase().includes(query.toLowerCase()));
                         if (quotes && quotes.length > 0) {
                             randomEntry = quotes[Math.floor(Math.random() * quotes.length)].entryIndex;
                         }
                     }
                     if (randomEntry === -1) {
-                        message.reply(`LBA1 quote containing *\`${a[0]}\`* was not found!!`);
+                        message.reply(`LBA1 quote containing *\`${query}\`* was not found!!`);
                         break;
                     }
                 } else {
@@ -231,18 +232,19 @@ client.on('message', message => {
             case 'lba2': {
                 let randomEntry = -1;
                 if (a.length > 0) {
+                    const query = a.join(' ');
                     if (!isNaN(a[0])) {
                         randomEntry = parseInt(a[0]);
                     } else if (a[0].includes('#')) {
                         randomEntry = parseInt(a[0].split('#')[1]);
                     } else {
-                        const quotes = allquotes2.filter((q) => q.value.toLowerCase().includes(a[0].toLowerCase()));
+                        const quotes = allquotes2.filter((q) => q.value.toLowerCase().includes(query.toLowerCase()));
                         if (quotes && quotes.length > 0) {
                             randomEntry = quotes[Math.floor(Math.random() * quotes.length)].entryIndex;
                         }
                     }
                     if (randomEntry === -1) {
-                        message.reply(`LBA2 quote containing *\`${a[0]}\`* was not found!!`);
+                        message.reply(`LBA2 quote containing *\`${query}\`* was not found!!`);
                         break;
                     }
                 } else {
